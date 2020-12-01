@@ -2,6 +2,7 @@
 
 Kibana plugin
 
+`[Yassine LASRI] : This has been tested using the master branch of Kibana, at that time the current dev version was 8.0.0`
 ---
 
 ## Development
