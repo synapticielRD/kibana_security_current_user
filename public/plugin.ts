@@ -6,10 +6,15 @@ import {
   AppPluginStartDependencies,
 } from './types';
 import { PLUGIN_NAME } from '../common';
+import { SecurityPluginSetup } from '../../../x-pack/plugins/security/public';
+
+interface PluginSetupDeps {
+   security: SecurityPluginSetup;
+}
 
 export class MyPluginExamplePlugin
   implements Plugin<MyPluginExamplePluginSetup, MyPluginExamplePluginStart> {
-  public setup(core: CoreSetup): MyPluginExamplePluginSetup {
+  public setup(core: CoreSetup, { security }: PluginSetupDeps): MyPluginExamplePluginSetup {
     // Register an application into the side navigation menu
     core.application.register({
       id: 'myPluginExample',
@@ -22,6 +27,13 @@ export class MyPluginExamplePlugin
         // Render the application
         return renderApp(coreStart, depsStart as AppPluginStartDependencies, params);
       },
+    });
+
+    const { getCurrentUser } = security.authc;
+
+    // not using `await` because the `setup` plugin lifecycle method should not be async.
+   getCurrentUser().then(user => { 
+     console.log(user);
     });
 
     // Return methods that should be available to other plugins
